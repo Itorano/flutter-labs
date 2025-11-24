@@ -1,4 +1,4 @@
-package com.example.aethel.aethel
+package com.example.aethel
 
 import io.flutter.embedding.android.FlutterActivity
 
