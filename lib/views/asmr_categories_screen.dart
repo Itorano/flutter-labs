@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:aethel/views/asmr_category_tracks_screen.dart';
 
 class AsmrCategoriesScreen extends StatelessWidget {
   const AsmrCategoriesScreen({super.key});
@@ -19,19 +20,33 @@ class AsmrCategoriesScreen extends StatelessWidget {
           crossAxisSpacing: 8,
           mainAxisSpacing: 8,
           children: [
-            _buildCategoryCard('Категория 1', Icons.water_drop),
-            _buildCategoryCard('Категория 2', Icons.ac_unit),
+            _buildCategoryCard(context, 'Категория 1', Icons.water_drop),
+            _buildCategoryCard(context, 'Категория 2', Icons.ac_unit),
+            _buildCategoryCard(context, 'Категория 3', Icons.nightlight_round),
+            _buildCategoryCard(context, 'Категория 4', Icons.spa),
+            _buildCategoryCard(context, 'Категория 5', Icons.self_improvement),
+            _buildCategoryCard(context, 'Категория 6', Icons.music_note),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildCategoryCard(String name, IconData icon) {
+  Widget _buildCategoryCard(
+      BuildContext context, String name, IconData icon) {
     return Card(
       color: const Color(0xFFADBCD3),
       child: InkWell(
-        onTap: null,
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  AsmrCategoryTracksScreen(categoryName: name),
+            ),
+          );
+        },
+        borderRadius: BorderRadius.circular(12),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

@@ -1,8 +1,10 @@
 import 'package:aethel/views/asmr_categories_screen.dart';
 import 'package:aethel/views/asmr_category_tracks_screen.dart';
 import 'package:aethel/views/asmr_screen.dart';
+import 'package:aethel/views/asmr_sleep_timer_screen.dart';
 import 'package:aethel/views/library_screen.dart';
 import 'package:aethel/views/asmr_offline_player_screen.dart';
+import 'package:aethel/views/asmr_player_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -15,6 +17,7 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: HomeScreen(),
     );
   }
@@ -50,7 +53,14 @@ class HomeScreen extends StatelessWidget {
               ),
               const SizedBox(height: 60),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const AsmrScreen(),
+                    ),
+                  );
+                },
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size(double.infinity, 70),
                   backgroundColor: const Color(0xFFADBCD3),
@@ -76,7 +86,14 @@ class HomeScreen extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const LibraryScreen(),
+                    ),
+                  );
+                },
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size(double.infinity, 70),
                   backgroundColor: const Color(0xFFADBCD3),
@@ -87,7 +104,8 @@ class HomeScreen extends StatelessWidget {
                 child: const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.library_music_rounded, size: 28, color: Color(0xFF7C9FB0)),
+                    Icon(Icons.library_music_rounded,
+                        size: 28, color: Color(0xFF7C9FB0)),
                     SizedBox(width: 16),
                     Text(
                       'Библиотека',

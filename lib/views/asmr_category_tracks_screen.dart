@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:aethel/views/asmr_player_screen.dart';
 
 class AsmrCategoryTracksScreen extends StatelessWidget {
-  const AsmrCategoryTracksScreen({super.key});
+  final String categoryName;
+
+  const AsmrCategoryTracksScreen({
+    super.key,
+    required this.categoryName,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -9,21 +15,23 @@ class AsmrCategoryTracksScreen extends StatelessWidget {
       backgroundColor: const Color(0xFFD8DFE8),
       appBar: AppBar(
         backgroundColor: const Color(0xFFD8DFE8),
-        title: const Text('КАТЕГОРИЯ 1'),
+        title: Text(categoryName.toUpperCase()),
         centerTitle: true,
       ),
       body: ListView(
         padding: const EdgeInsets.all(20),
         children: [
-          _buildTrackCard('Трек категории 1'),
+          _buildTrackCard(context, 'Трек $categoryName 1'),
           const SizedBox(height: 12),
-          _buildTrackCard('Трек категории 2'),
+          _buildTrackCard(context, 'Трек $categoryName 2'),
+          const SizedBox(height: 12),
+          _buildTrackCard(context, 'Трек $categoryName 3'),
         ],
       ),
     );
   }
 
-  Widget _buildTrackCard(String title) {
+  Widget _buildTrackCard(BuildContext context, String title) {
     return Card(
       color: const Color(0xFFADBCD3),
       child: ListTile(
@@ -36,8 +44,16 @@ class AsmrCategoryTracksScreen extends StatelessWidget {
           '00:45:30',
           style: TextStyle(color: Color(0xFF7C9FB0)),
         ),
-        trailing: const Icon(Icons.download_rounded, color: Color(0xFF7C9FB0)),
-        onTap: null,
+        trailing:
+        const Icon(Icons.play_arrow_rounded, color: Color(0xFF7C9FB0)),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AsmrPlayerScreen(trackTitle: title),
+            ),
+          );
+        },
       ),
     );
   }

@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:aethel/views/asmr_sleep_timer_screen.dart';
 
-class AsmrOfflinePlayerScreen extends StatefulWidget {
-  const AsmrOfflinePlayerScreen({super.key});
+class AsmrPlayerScreen extends StatefulWidget {
+  final String trackTitle;
+
+  const AsmrPlayerScreen({
+    super.key,
+    required this.trackTitle,
+  });
 
   @override
-  State<AsmrOfflinePlayerScreen> createState() =>
-      _AsmrOfflinePlayerScreenState();
+  State<AsmrPlayerScreen> createState() => _AsmrPlayerScreenState();
 }
 
-class _AsmrOfflinePlayerScreenState extends State<AsmrOfflinePlayerScreen> {
+class _AsmrPlayerScreenState extends State<AsmrPlayerScreen> {
   bool _isPlaying = false;
   bool _isFavorite = false;
   double _currentPosition = 0.0;
@@ -24,6 +29,14 @@ class _AsmrOfflinePlayerScreenState extends State<AsmrOfflinePlayerScreen> {
     setState(() {
       _isFavorite = !_isFavorite;
     });
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(_isFavorite
+            ? 'Добавлено в избранное'
+            : 'Удалено из избранного'),
+        duration: const Duration(seconds: 1),
+      ),
+    );
   }
 
   @override
@@ -32,49 +45,51 @@ class _AsmrOfflinePlayerScreenState extends State<AsmrOfflinePlayerScreen> {
       backgroundColor: const Color(0xFFD8DFE8),
       appBar: AppBar(
         backgroundColor: const Color(0xFFD8DFE8),
-        title: const Text('Трек 1'),
+        title: const Text('Воспроизведение'),
         centerTitle: true,
       ),
       body: Padding(
         padding: const EdgeInsets.all(24),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Обложка трека
+            const Spacer(),
+            // Видео плеер (заглушка)
             Container(
-              width: 250,
-              height: 250,
+              width: double.infinity,
+              height: 220,
               decoration: BoxDecoration(
                 color: const Color(0xFFADBCD3),
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(16),
               ),
-              child: const Icon(
-                Icons.music_note_rounded,
-                size: 100,
-                color: Color(0xFF7C9FB0),
+              child: Icon(
+                _isPlaying
+                    ? Icons.pause_circle_outline_rounded
+                    : Icons.play_circle_outline_rounded,
+                size: 80,
+                color: const Color(0xFF7C9FB0),
               ),
             ),
-            const SizedBox(height: 40),
+            const SizedBox(height: 30),
             // Название трека
-            const Text(
-              'Название трека',
-              style: TextStyle(
+            Text(
+              widget.trackTitle,
+              style: const TextStyle(
                 color: Colors.white,
-                fontSize: 24,
+                fontSize: 18,
                 fontWeight: FontWeight.w600,
               ),
               textAlign: TextAlign.center,
+              maxLines: 2,
             ),
             const SizedBox(height: 8),
-            // Автор
             const Text(
               'Автор трека',
               style: TextStyle(
                 color: Color(0xFF7C9FB0),
-                fontSize: 16,
+                fontSize: 14,
               ),
             ),
-            const SizedBox(height: 40),
+            const SizedBox(height: 30),
             // Прогресс бар
             Slider(
               value: _currentPosition,
@@ -93,35 +108,35 @@ class _AsmrOfflinePlayerScreenState extends State<AsmrOfflinePlayerScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    '${(_currentPosition / 60).floor()}:${(_currentPosition % 60).floor().toString().padLeft(2, '0')}',
+                    _formatDuration(_currentPosition),
                     style: const TextStyle(color: Color(0xFF7C9FB0)),
                   ),
                   Text(
-                    '${(_maxDuration / 60).floor()}:${(_maxDuration % 60).floor().toString().padLeft(2, '0')}',
+                    _formatDuration(_maxDuration),
                     style: const TextStyle(color: Color(0xFF7C9FB0)),
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 20),
             // Кнопки управления
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
+                IconButton(
+                  onPressed: _toggleFavorite,
+                  icon: Icon(
+                    _isFavorite ? Icons.favorite : Icons.favorite_border,
+                    color: const Color(0xFF7C9FB0),
+                    size: 32,
+                  ),
+                ),
                 IconButton(
                   onPressed: () {},
                   icon: const Icon(
                     Icons.skip_previous_rounded,
                     color: Color(0xFF7C9FB0),
                     size: 40,
-                  ),
-                ),
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.fast_rewind,
-                    color: Color(0xFF7C9FB0),
-                    size: 36,
                   ),
                 ),
                 Container(
@@ -141,52 +156,20 @@ class _AsmrOfflinePlayerScreenState extends State<AsmrOfflinePlayerScreen> {
                 IconButton(
                   onPressed: () {},
                   icon: const Icon(
-                    Icons.fast_forward,
-                    color: Color(0xFF7C9FB0),
-                    size: 36,
-                  ),
-                ),
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
                     Icons.skip_next_rounded,
                     color: Color(0xFF7C9FB0),
                     size: 40,
                   ),
                 ),
-              ],
-            ),
-            const SizedBox(height: 30),
-            // Дополнительные кнопки
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
                 IconButton(
-                  onPressed: _toggleFavorite,
-                  icon: Icon(
-                    _isFavorite ? Icons.favorite : Icons.favorite_border,
-                    color: const Color(0xFF7C9FB0),
-                    size: 32,
-                  ),
-                ),
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.repeat,
-                    color: Color(0xFF7C9FB0),
-                    size: 32,
-                  ),
-                ),
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.shuffle,
-                    color: Color(0xFF7C9FB0),
-                    size: 32,
-                  ),
-                ),
-                IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const AsmrSleepTimerScreen(),
+                      ),
+                    );
+                  },
                   icon: const Icon(
                     Icons.timer_outlined,
                     color: Color(0xFF7C9FB0),
@@ -195,9 +178,16 @@ class _AsmrOfflinePlayerScreenState extends State<AsmrOfflinePlayerScreen> {
                 ),
               ],
             ),
+            const Spacer(),
           ],
         ),
       ),
     );
+  }
+
+  String _formatDuration(double seconds) {
+    final minutes = (seconds / 60).floor();
+    final remainingSeconds = (seconds % 60).floor();
+    return '${minutes.toString().padLeft(2, '0')}:${remainingSeconds.toString().padLeft(2, '0')}';
   }
 }
